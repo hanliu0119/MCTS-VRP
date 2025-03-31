@@ -18,32 +18,32 @@ def main():
     # for req in requests[:3]:
     #     print(req)
 
-    # # Run all real request distribution plots
-    # plot_time_window_gantt(requests, "real")
-    # plot_hourly_demand(requests, "real")
-    # plot_request_location(requests, "real")
+    # Run all real request distribution plots
+    plot_time_window_gantt(requests, "real")
+    plot_hourly_demand(requests, "real")
+    plot_request_location(requests, "real")
 
-    # # train NN model to generate future request
-    # model = train_model(requests)
-    # future_requests = sample_future_requests(model, requests, n=120)
-    # print(future_requests[0])
-    # print(f"Sampled {len(future_requests)} synthetic requests for 'future_date'")
-    # plot_time_window_gantt(future_requests, "sampled")
-    # plot_hourly_demand(future_requests, "sampled")
-    # plot_request_location(future_requests, "sampled")
+    # train NN model to generate future request
+    model = train_model(requests)
+    future_requests = sample_future_requests(model, requests, n=120)
+    print(future_requests[0])
+    print(f"Sampled {len(future_requests)} synthetic requests for 'future_date'")
+    plot_time_window_gantt(future_requests, "sampled")
+    plot_hourly_demand(future_requests, "sampled")
+    plot_request_location(future_requests, "sampled")
 
-    # # test greedy
-    # vehicles_by_date, unserved_by_date = greedy_solve(requests, travel_time_matrices)
+    # test greedy
+    vehicles_by_date, unserved_by_date = greedy_solve(requests, travel_time_matrices)
 
-    # for date in vehicles_by_date:
-    #     total_assigned = sum(len(v.route) // 2 for v in vehicles_by_date[date])
-    #     print(f"{date}: Assigned {total_assigned} requests, Unserved: {len(unserved_by_date[date])}")
-    # # evaluate greedy
-    # requests_by_date = defaultdict(list)
-    # for r in requests:
-    #     requests_by_date[r.date].append(r)
+    for date in vehicles_by_date:
+        total_assigned = sum(len(v.route) // 2 for v in vehicles_by_date[date])
+        print(f"{date}: Assigned {total_assigned} requests, Unserved: {len(unserved_by_date[date])}")
+    # evaluate greedy
+    requests_by_date = defaultdict(list)
+    for r in requests:
+        requests_by_date[r.date].append(r)
 
-    # plot_vehicle_request_map(vehicles_by_date, requests_by_date)
+    plot_vehicle_request_map(vehicles_by_date, requests_by_date)
 
     # test MCTS
     mcts_vehicles_by_date = {}
@@ -54,7 +54,7 @@ def main():
     for r in requests:
         requests_by_date[r.date].append(r)
 
-    # ✅ Train a single global generative model using all requests
+    #  Train a single global generative model using all requests
     print("Training global generative model...")
     model = train_model(requests)
 
