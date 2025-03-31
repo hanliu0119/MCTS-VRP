@@ -29,7 +29,7 @@ def plot_vehicle_request_map(vehicles_by_date, requests_by_date, save_folder="gr
         plt.legend()
         plt.grid(True)
         plt.tight_layout()
-        plt.savefig(f"{save_folder}/outputs/greedy_map_{date}.png")
+        plt.savefig(f"./outputs/greedy_map_{date}.png")
         plt.close()
 
-    print(f"✅ Saved greedy route maps to '{save_folder}'")
+    print(f" Saved greedy route maps to '{save_folder}'")
