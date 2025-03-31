@@ -26,3 +26,6 @@ This project implements a Monte Carlo Tree Search (MCTS) based solution for a **
 │   ├── request_distribution.py     # Visualization of request distributions
 │   ├── greedy_evaluation.py        # Evaluation plots for greedy solution
 ├── data/                           # Folder containing daily request data
+
+## Code Running
+Simply run python main.py, it includes Data Loading, Generative Model Training (NN), Greedy Algorithm run, MCTS run. 
