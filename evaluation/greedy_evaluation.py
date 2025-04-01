@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import os
 
+# Plots and saves the routes taken by each vehicle on a map for each date
 def plot_vehicle_request_map(vehicles_by_date, requests_by_date, save_folder="greedy_maps"):
     os.makedirs(save_folder, exist_ok=True)
 

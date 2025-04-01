@@ -11,6 +11,7 @@ class Vehicle:
         self.location = None  # set when first request is assigned
         self.route = []  # list of (pickup_id, dropoff_id)
 
+    # Checks if the vehicle can serve a request within the pickup time window
     def can_serve(self, request, travel_time_matrix):
         pickup_id = request.pickup_id
         dropoff_id = request.dropoff_id
@@ -26,6 +27,7 @@ class Vehicle:
 
         return True
 
+    # Assigns a request to the vehicle and updates its state and route
     def assign(self, request, travel_time_matrix):
         pickup_id = request.pickup_id
         dropoff_id = request.dropoff_id
@@ -53,6 +55,7 @@ class Vehicle:
         self.route.append(dropoff_id)
 
 
+# Solves the routing problem greedily by assigning earliest-feasible requests to available vehicles
 def greedy_solve(requests, travel_time_matrices, vehicle_count=4, capacity=12):
     # Group requests by date
     requests_by_date = defaultdict(list)

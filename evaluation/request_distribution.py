@@ -5,12 +5,14 @@ from datetime import timedelta
 import os
 
 def seconds_to_time(seconds):
+    # Convert seconds to HH:MM string format.
     total_minutes = (seconds // 60)
     hours = int(total_minutes // 60)
     minutes = int(total_minutes % 60)
     return f"{hours:02d}:{minutes:02d}"
 
 def plot_request_location(requests, label):
+    # Plot dropoff locations of requests colored by demand.
     os.makedirs("outputs", exist_ok=True)
     dropoffs = np.array([req.dropoff_loc for req in requests])
     demands = np.array([req.demand for req in requests])
@@ -33,6 +35,7 @@ def plot_request_location(requests, label):
     plt.close()
 
 def plot_hourly_demand(requests, label):
+    # Plot average hourly demand over all days.
     os.makedirs("outputs", exist_ok=True)
     times = [req.pickup_tw[0] for req in requests]
     demands = [req.demand for req in requests]
@@ -56,6 +59,7 @@ def plot_hourly_demand(requests, label):
     plt.close()
 
 def plot_time_window_gantt(requests, label):
+    # Plot Gantt charts showing pickup and dropoff time windows per request.
     output_dir = f"outputs/Gantt_chart_request_{label}"
     os.makedirs(output_dir, exist_ok=True)
 
@@ -90,4 +94,4 @@ def plot_time_window_gantt(requests, label):
         plt.savefig(filepath)
         plt.close()
 
-    print(f"✅ Gantt charts saved to: {output_dir}")
+    print(f"Gantt charts saved to: {output_dir}")

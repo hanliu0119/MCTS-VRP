@@ -2,6 +2,7 @@ import math
 import random
 import copy
 import numpy as np
+
 from models.mdp import MDPState
 from models.generative_model import ClusteredRequestGenerator
 
@@ -15,19 +16,23 @@ class MCTSNode:
         self.visits = 0
         self.total_value = 0.0
 
+    # Returns True if all legal actions have been expanded
     def is_fully_expanded(self):
         return len(self.children) == len(self.state.get_legal_actions())
 
+    # Returns the child with the highest UCT value
     def best_child(self, c_param=1.0):
         if not self.children:
             return None
         return max(self.children, key=lambda node: node.uct_value(c_param))
 
+    # Computes the UCT value for this node
     def uct_value(self, c):
         if self.visits == 0:
             return float('inf')
         return (self.total_value / self.visits) + c * math.sqrt(math.log(self.parent.visits) / self.visits)
 
+    # Expands the node by adding one of the top-k highest scoring child nodes
     def expand(self, top_k=30):
         tried_actions = [child.action for child in self.children]
         legal_actions = self.state.get_legal_actions()
@@ -50,6 +55,7 @@ class MCTSNode:
                 return node
         return None
 
+    # Checks if this node represents a terminal state
     def is_terminal(self):
         return self.state.is_terminal()
 
@@ -60,6 +66,7 @@ class MCTS:
         self.model = model
         self.rollout_depth = rollout_depth
 
+    # Performs MCTS for a given number of iterations and returns the best action
     def search(self, iterations):
         rewards = []
         for i in range(iterations):
@@ -74,13 +81,10 @@ class MCTS:
             self.backpropagate(node, value)
             rewards.append(value)
 
-            # if i % 100 == 0:
-            #     last = rewards[-100:] if len(rewards) >= 100 else rewards
-            #     print(f"Rollout {i}: Reward = {value:.4f}, Avg (last 100) = {np.mean(last):.4f}, Max = {max(last):.4f}")
-
         best = self.root.best_child(c_param=0.0)
         return best.action if best else None
 
+    # Selects a node to expand by traversing fully expanded nodes
     def select(self, node):
         while not node.is_terminal() and node.is_fully_expanded():
             node = node.best_child()
@@ -88,16 +92,16 @@ class MCTS:
                 break
         return node
 
+    # Simulates a rollout from the given state and returns a shaped reward
     def simulate(self, state):
         sim_state = state.copy()
-        served = 0
+        self._inject_synthetic_requests(sim_state, n=120)
 
+        served = 0
         for step in range(self.rollout_depth):
             legal = sim_state.get_legal_actions()
             if not legal:
-                legal = self._inject_and_get_legal(sim_state)
-                if not legal:
-                    break
+                break
 
             scores = []
             for (vi, ri) in legal:
@@ -117,8 +121,6 @@ class MCTS:
             served += 1
 
         reward = served
-
-        # Penalties
         travel_penalty = sum(v.get_penalty(sim_state.travel_time_matrix) for v in sim_state.vehicles)
         idle_penalty = sum(v.idle_time for v in sim_state.vehicles) * 0.0001
         overload_penalty = sum(max(0, v.load - v.capacity) for v in sim_state.vehicles) * 2.0
@@ -126,9 +128,10 @@ class MCTS:
 
         return reward - travel_penalty - idle_penalty - overload_penalty - balance_penalty
 
-    def _inject_and_get_legal(self, sim_state):
+    # Adds synthetic future requests using the generative model
+    def _inject_synthetic_requests(self, sim_state, n=120):
         new_requests = []
-        for _ in range(5):
+        for _ in range(n):
             if not sim_state.pending_requests:
                 break
             base = random.choice(sim_state.pending_requests)
@@ -150,13 +153,10 @@ class MCTS:
                 service_time=60
             ))
         sim_state.pending_requests.extend(new_requests)
-        return sim_state.get_legal_actions()
 
+    # Backpropagates the reward through the path to the root
     def backpropagate(self, node, reward):
         while node:
             node.visits += 1
             node.total_value += reward
             node = node.parent
-
-
-    

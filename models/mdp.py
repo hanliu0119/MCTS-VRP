@@ -15,10 +15,9 @@ class VehicleState:
         return copy.deepcopy(self)
 
     def can_serve(self, request, travel_time_matrix):
-        N = 10
         pickup_id = request.pickup_id
         dropoff_id = request.dropoff_id
-        allow_late = 600 * N
+        allow_late = 600
 
         travel_to_pickup = 0 if self.location is None else travel_time_matrix[self.location][pickup_id]
         arrival_at_pickup = max(self.time + travel_to_pickup, request.pickup_tw[0])
