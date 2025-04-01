@@ -35,11 +35,11 @@ Simply run python main.py, it includes Data Loading, Generative Model Training (
 
 ## Meet Preliminary Exam specifications by
 1. Built a full pipeline to solve VRP problem
-2. Implemented a generative model (I tried Neural Network first, but it cause low traning accuracy), then I swithced to Random Forest to sample requests
-3. Evaluated the sampled requests by plotting the location distribution, and histogram of the number of the demands (hourly) for days
+2. Implemented a generative model (I tried Neural Network first, but it caused low training accuracy), then I swithced to Random Forest to sample requests
+3. Evaluated the sampled requests by plotting the location distribution among longitude and latitude, and histogram of the average number of the demands (hourly) for a day
 4. Implemented a greedy algorithm which does not consider future incoming requests, but only focus on the current demands
-5. Implemented MCTS together with the generative model, so it can take advantage of the simulated/sampled future request while it determines optimal actions for each demand.
+5. Implemented MCTS together with the generative model, so it can take advantage of the simulated/sampled future request while it determines optimal routes.
 
-However, the generative model is not able to detect the spatial information of historical request data very well (which can definitely be improved in the future), even though it can perfectly learn the pattern of number of demands per hour in a day. As aresult, our MCST-based algorithm performance got beaten by the greedy algorithm (~50% VS ~70% in terms of average successful service rate).
+However, the generative model is not able to successfully detect the pattern of spatial information from historical request data (which can definitely be improved in the future after more explorations), even though it can perfectly learn the pattern of number of demands per hour in a day. As aresult, our MCST-based algorithm performance got beaten by the greedy algorithm (~50% VS ~70% in terms of average successful service rate).
 
 In conclusion, this work builds a fundamental framwork of how researchers solve a VRP problem, which usually includes components, such as an offline learner of historical data, an online solver to determine optimal routes for action space, and evaluations modules to validate the results.
