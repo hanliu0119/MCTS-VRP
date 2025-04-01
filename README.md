@@ -41,4 +41,5 @@ Simply run python main.py, it includes Data Loading, Generative Model Training (
 5. Implemented MCTS together with the generative model, so it can take advantage of the simulated/sampled future request while it determines optimal actions for each demand.
 
 However, the generative model is not able to detect the spatial information of historical request data very well (which can definitely be improved in the future), even though it can perfectly learn the pattern of number of demands per hour in a day. As aresult, our MCST-based algorithm performance got beaten by the greedy algorithm (~50% VS ~70% in terms of average successful service rate).
+
 In conclusion, this work builds a fundamental framwork of how researchers solve a VRP problem, which usually includes components, such as an offline learner of historical data, an online solver to determine optimal routes for action space, and evaluations modules to validate the results.
