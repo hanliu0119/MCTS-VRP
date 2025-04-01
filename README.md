@@ -31,9 +31,11 @@ This project implements a Monte Carlo Tree Search (MCTS) based solution for a **
 Simply run python main.py, it includes Data Loading, Generative Model Training (NN), Greedy Algorithm run, MCTS run. 
 
 
+```
+
 ## Meet Preliminary Exam specifications by
 1. Building a full pipeline to solve VRP problem
-2. Implement a generative model (tried Neural Network first, but it cause low traning accuracy), then I swithced to Random Forest to sample requests
+2. Implement a generative model (I tried Neural Network first, but it cause low traning accuracy), then I swithced to Random Forest to sample requests
 3. Evaluate the sampled requests by plotting the location distribution, and histogram of the number of the demands (hourly) for days
 4. Implement a greedy algorithm which does not consider future incoming requests, but only focus on the current demands
 5. Implement MCTS together with the generative model, so it can take advantage of the simulated/sampled future request while it determines optimal actions for each demand.
